@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # Spring Boot Java Backend
+  java-backend:
+    image: your-dockerhub-username/ncc2025-java-backend:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  # Node.js Express Backend
+  nodejs-backend:
+    image: your-dockerhub-username/ncc2025-nodejs-backend:latest
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+    environment:
+      - NODE_ENV=production
+
+  # Frontend (Nginx)
+  frontend:
+    image: your-dockerhub-username/ncc2025-frontend:latest
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+    depends_on:
+      - java-backend
+      - nodejs-backend
+
+networks:
+  app-network:
+    driver: bridge
